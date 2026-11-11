@@ -1,11 +1,11 @@
 using UnityEngine;
-
 public class Rat : MonoBehaviour
 {
     [SerializeField] private float _shrinkAmount;
     [SerializeField] private float _spawnAmount;
     [SerializeField] private GameObject _ratPrefab;
     [SerializeField] private SpriteRenderer _explosionPrefab;
+    [SerializeField] private GameObject Rat_Mother;
 
     private Color[] _colors = new Color[3]
     {
@@ -14,7 +14,8 @@ public class Rat : MonoBehaviour
         Color.blue
     };
     private int _colorIndex;
-
+    private int _newcolor;
+    
     // ------------------------------------------------------------------------
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -24,7 +25,24 @@ public class Rat : MonoBehaviour
         //      more rats. (The spawning logic is written for you.)
         //
         // Also, shrink the original Rat by _shrinkAmount amount.
-        //
+        string tag = collision.gameObject.tag;
+        if(tag.Equals("Attack"))
+        {
+            for (int _spawn = 0; _spawn < _spawnAmount; _spawn++)
+            {
+                SpawnSmallRat();
+            }
+            Rat_Mother.transform.localScale = Rat_Mother.transform.localScale * _shrinkAmount;
+            //for (int _newcolor = 0; _newcolor < _colors.Length; _newcolor++)
+ 
+               SpawnExplosion(_colors [_newcolor]);
+            _newcolor += 1;
+            if(_newcolor == _colors.Length)
+            {
+                _newcolor = 0;
+            }
+        }            
+
         // STEP 3
         // Additionally, call SpawnExplosion(), and pass in a different color
         //      every time.
@@ -60,9 +78,9 @@ public class Rat : MonoBehaviour
         //      rotation correctly.
         // Your game should look exaclty like the finished example.
 
-        //float randomAngle = Random.Range(0, 360);
-        //Vector3 rotationAngles = new Vector3(0, randomAngle, 0);
-        //rat.transform.Rotate(rotationAngles);
+        float randomAngle = Random.Range(0, 360);
+        Vector3 rotationAngles = new Vector3(0, 0, randomAngle);
+        rat.transform.Rotate(rotationAngles);
 
         // STEP 3 -------------------------------------------------------------
     }
